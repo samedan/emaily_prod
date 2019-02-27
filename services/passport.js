@@ -53,33 +53,33 @@ passport.use(
 );
 
 // Facebook OAuth Strategy
-// passport.use(
-//   new FacebookStrategy(
-//     {
-//       clientID: keys.facebookAppID,
-//       clientSecret: keys.facebookAppSecret,
-//       callbackURL: '/auth/facebook/callback',
-//       proxy: true
-//     },
-//     async (accessToken, refreshToken, profile, done) => {
-//       try {
-//         const existingUser = await User.findOne({ facebookId: profile.id });
-//         if (existingUser) {
-//           return done(null, existingUser);
-//         } else {
-//           const newUser = await new User({
-//             facebookId: profile.id,
-//             displayName: profile.displayName
-//           }).save();
-//           createSampleSurvey(newUser.id);
-//           return done(null, newUser);
-//         }
-//       } catch (err) {
-//         console.log(err);
-//       }
-//     }
-//   )
-// );
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: keys.facebookAppID,
+      clientSecret: keys.facebookAppSecret,
+      callbackURL: '/auth/facebook/callback',
+      proxy: true
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        const existingUser = await User.findOne({ facebookId: profile.id });
+        if (existingUser) {
+          return done(null, existingUser);
+        } else {
+          const newUser = await new User({
+            facebookId: profile.id,
+            displayName: profile.displayName
+          }).save();
+          createSampleSurvey(newUser.id);
+          return done(null, newUser);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  )
+);
 
 async function createSampleSurvey(id) {
   const sampleSurvey = await new Survey({
